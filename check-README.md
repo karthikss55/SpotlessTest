@@ -1,25 +1,23 @@
-#Spotless Android
+# Spotless Android
 
-##Introduction
+## Introduction
 
 Since our project has both JAVA and KOTLIN files, we thought of going with spotless for code linting and formatting, as it supports multiple languages(Java,Kotlin,XML etc).
 But due to some reasons ,it is not formatting kt files as expected. So we have decided to integrate both Spotless(for java and XML files) and ktlint (for Kotlin files).
 
 Spotless - https://github.com/diffplug/spotless ktlint - https://github.com/pinterest/ktlint
 
-##Requirement
+## Requirement
 
 1. Spotless requires JRE 8+ and less than 15.
 2. Since our ASDA gradle version is 5.1.1 so we can use , id 'com.diffplug.gradle.spotless' version '4.5.1' which supports all the way back to Gradle 2.x`.
 
-##Integration with project (As a project level)
+## Integration with project (As a project level)
 
 1.  First of all, add the following dependency to your project-level build.gradle:
-
-          ```
-          classpath ‘com.diffplug.spotless:spotless-plugin-gradle:4.5.1’
-
-          ```
+       ```
+         classpath ‘com.diffplug.spotless:spotless-plugin-gradle:4.5.1’
+       ```
 
 2. Create a dedicated gradle file and apply it to the project one. It is as simple as creating a spotless.gradle file (you name it). Please refer below file
 
@@ -58,22 +56,24 @@ Spotless - https://github.com/diffplug/spotless ktlint - https://github.com/pint
 
  3. Add below line on your project level build.gradle file
 
-          ```
+       ```
           apply from: './spotless.gradle'
-          ```
+       ```
 
  4. Configure ktlint in project level. Add below changes in project level.
 
-         ```
+       ```
          configurations {
             ktlint
          }
 
+		// Add below as dependency
+
         ktlint "com.pinterest:ktlint:0.41.0"
-        ```
+      ```
 
  5. Finally add a ktlint linting and formatting gradle tasks in project level build.gradle (which will be executed as a terminal commands)
-        ```
+       ```
          // task for liting the kt files
          task ktlint(type: JavaExec, group: "verification") {
              description = "Check Kotlin code style."
@@ -92,7 +92,7 @@ Spotless - https://github.com/diffplug/spotless ktlint - https://github.com/pint
              main = "com.pinterest.ktlint.Main"
              args "-F", "src/**/*.kt"
          }
-         ```
+       ```
  6. Sync the project, Now spotless and ktlint has successfully been integrated in ouR project as project level.
 
  7. Execute below gradle commands to lint the code base
@@ -114,15 +114,14 @@ Spotless - https://github.com/diffplug/spotless ktlint - https://github.com/pint
     so we have decided to apply the rules as module level for each modules separately. In the next section we have explained how to achieve this.
 
 
- ##Integration with project (As a module level)
+ ## Integration with project (As a module level)
 
  1. Follow 1 and 2 points as it is from previous section, form 3rd point onwards, apply those same changes in module level build.gradle file and sync.
 
  2. Execution of the commands will differ a bit as we need to move to respective module directory on the terminal to execute the linting and formatting gradle commands.
 
 
- ##Note
+ ## Note
 
- 1. After formatting the files in module level, while creating a PR skip the gradle changes and commit only formatting
-    changes to the PR. (Since this should be added as a project level once after formatting whole project)
+ 1. After formatting the files in module level, while creating a PR skip the gradle changes and commit only formatting changes to the PR. (Since this should be added as a project level once after formatting whole project)
 
